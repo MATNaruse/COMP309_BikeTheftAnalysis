@@ -14,7 +14,10 @@ Created on Wed Nov 11 12:25:33 2020
 import os, pandas
 from pathlib import Path
 
-# Find Relative Paths
+pandas.set_option('display.expand_frame_repr', False)
+
+# Find Relative Paths 
+# (from ../COMP309_BikeTheftAnalysis/Deliverables/D1_DataExploration)
 path_dataset = os.path.join(Path(__file__).parents[2], "Dataset\Bicycle_Thefts.csv")
 path_dataset_meta = os.path.join(Path(__file__).parents[2], "Dataset\Bicycle_Thefts_Metadata.csv")
 
@@ -22,6 +25,9 @@ path_dataset_meta = os.path.join(Path(__file__).parents[2], "Dataset\Bicycle_The
 dataset = pandas.read_csv(path_dataset)
 dataset_meta = pandas.read_csv(path_dataset_meta)
 
-@staticmethod
-def test():
-    print("It Works!")
+# Descriptions & Types
+dataset.dtypes
+print(dataset_meta)
+
+# Ranges & Values
+dataset.describe()
