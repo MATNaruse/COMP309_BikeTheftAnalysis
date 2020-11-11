@@ -22,8 +22,7 @@ COMP309 Bike Theft Analysis
 
 Created on Wed Nov 11 13:08:52 2020
 """
-import sys
-import DataExploration.A1_LoadDescribeData
 
-DataExploration.A1_LoadDescribeData.test()
+# Import/Reference the work done in "1_DataExploration/"
 
+import
