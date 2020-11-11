@@ -23,8 +23,12 @@ COMP309 Bike Theft Analysis
 Created on Wed Nov 11 13:08:52 2020
 """
 
+# External Imports
 import os, pandas
 from pathlib import Path
+
+# Local Imports
+from D1_DataExploration_Modules.D1_A_LoadDescribeData import BikeData
 
 # Modify this from True/False to show full dataset.describe() in console
 pandas.set_option('display.expand_frame_repr', False)
@@ -37,23 +41,8 @@ pandas.set_option('display.expand_frame_repr', False)
 
 # Part A Start
 
-# Find Relative Paths 
-# (from ../COMP309_BikeTheftAnalysis/Deliverables)
-path_dataset = os.path.join(Path(__file__).parents[1], 
-                                "Dataset\Bicycle_Thefts.csv")
-path_dataset_meta = os.path.join(Path(__file__).parents[1], 
-                                "Dataset\Bicycle_Thefts_Metadata.csv")
-
-# Load Data
-dataset = pandas.read_csv(path_dataset)
-dataset_meta = pandas.read_csv(path_dataset_meta)
-
-# Descriptions & Types
-dataset.dtypes
-print(dataset_meta)
-
-# Ranges & Values
-dataset.describe()
+dataset = BikeData.get_dataset()
+dataset_meta = BikeData.get_metadataset()
 
 # Part A End
 

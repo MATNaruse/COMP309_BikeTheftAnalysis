@@ -27,7 +27,7 @@ dataset_meta = pandas.read_csv(path_dataset_meta)
 
 # Descriptions & Types
 dataset.dtypes
-print(dataset_meta)
+#print(dataset_meta)
 
 # Ranges & Values
 dataset.describe()

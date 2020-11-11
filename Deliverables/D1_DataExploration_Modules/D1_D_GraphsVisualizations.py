@@ -9,4 +9,5 @@ COMP309 Bike Theft Analysis
 
 Created on Wed Nov 11 13:06:20 2020
 """
+from D1_A_LoadDescribeData import BikeData
 
