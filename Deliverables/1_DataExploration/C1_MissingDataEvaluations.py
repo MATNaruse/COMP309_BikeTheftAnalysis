@@ -1,0 +1,12 @@
+# -*- coding: utf-8 -*-
+"""
+COMP309 Bike Theft Analysis
+### ### ### : Full Name
+
+1) Data exploration: a complete review and analysis of the dataset including:
+    c) Missing data evaluations – use pandas, numpy and any other python 
+        packages
+
+Created on Wed Nov 11 13:05:05 2020
+"""
+
