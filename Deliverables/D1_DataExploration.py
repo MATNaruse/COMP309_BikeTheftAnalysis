@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 COMP309 Bike Theft Analysis
-### ### ### : Full Name
+301 063 251 : Arthur Batista
 ### ### ### : Full Name
 ### ### ### : Full Name
 ### ### ### : Full Name
@@ -29,9 +29,10 @@ from pathlib import Path
 
 # Local Imports
 from D1_DataExploration_Modules.D1_A_LoadDescribeData import BikeData
+from D1_DataExploration_Modules.D1_B_StatisticalAssessments import Statistical
 
 # Modify this from True/False to show full dataset.describe() in console
-pandas.set_option('display.expand_frame_repr', False)
+pandas.set_option('display.expand_frame_repr', True)
 
 """===========================================================================
     PART A) Load and describe data elements (columns), provide descriptions 
@@ -52,6 +53,10 @@ dataset_meta = BikeData.get_metadataset()
 
 # Part B Start
 
+statistic_dataset = Statistical.get_statistical_dataset()
+
+#Found out it is not necessary display statistical assessments for metadataset
+#statistic_metadataset = Statistical.get_statistical_metadataset()
 
 # Part B End
 
