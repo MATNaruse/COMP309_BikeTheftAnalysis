@@ -2,12 +2,10 @@
 """
 COMP309 Bike Theft Analysis
 301 063 251 : Arthur Batista
-### ### ### : Full Name
-### ### ### : Full Name
-### ### ### : Full Name
 300 549 638 : Matthew Naruse
 301 041 132 : Trent B Minia
 300 982 276 : Simon Ducuara
+### ### ### : Full Name
 
 1) Data exploration: a complete review and analysis of the dataset including:
     a) Load and describe data elements (columns), provide descriptions 
