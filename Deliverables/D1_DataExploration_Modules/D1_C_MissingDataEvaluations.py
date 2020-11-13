@@ -2,7 +2,7 @@
 """
 COMP309 Bike Theft Analysis
 301 041 132 Trent B Minia
-### ### ### Simon Ducuara
+300 982 276 Simon Ducuara
 
 1) Data exploration: a complete review and analysis of the dataset including:
     c) Missing data evaluations – use pandas, numpy and any other python 
