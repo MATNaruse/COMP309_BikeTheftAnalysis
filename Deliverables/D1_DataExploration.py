@@ -29,6 +29,7 @@ from pathlib import Path
 
 # Local Imports
 from D1_DataExploration_Modules.D1_A_LoadDescribeData import BikeData
+from D1_DataExploration_Modules.D1_C_MissingDataEvaluationsi import Missing
 
 # Modify this from True/False to show full dataset.describe() in console
 pandas.set_option('display.expand_frame_repr', False)
@@ -61,6 +62,8 @@ dataset_meta = BikeData.get_metadataset()
 ==========================================================================="""
 
 # Part C Start
+
+missing_dataset = Missing.get_missing_data()
 
 
 # Part C End
