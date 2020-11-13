@@ -15,6 +15,6 @@ import pandas as pd
 
 class MissingData:
     @staticmethod
-    def get_missing_data():
+    def check_missing_data():
         missing_dataset = BikeData.get_dataset()
         return pd.isnull(missing_dataset)
