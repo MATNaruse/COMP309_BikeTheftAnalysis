@@ -1,2 +1,4 @@
 *.docx
 Deliverables/__pycache__/
+
+Deliverables/D1_DataExploration_Modules/__pycache__/
