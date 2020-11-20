@@ -2,10 +2,10 @@
 """
 COMP309 Bike Theft Analysis
 301 063 251 : Arthur Batista
-300 549 638 : Matthew Naruse
-301 041 132 : Trent B Minia
-300 982 276 : Simon Ducuara
 ### ### ### : Full Name
+### ### ### : Full Name
+### ### ### : Full Name
+300 549 638 : Matthew Naruse
 
 1) Data exploration: a complete review and analysis of the dataset including:
     a) Load and describe data elements (columns), provide descriptions 
@@ -30,7 +30,7 @@ from pathlib import Path
 # Local Imports
 from D1_DataExploration_Modules.D1_A_LoadDescribeData import BikeData
 from D1_DataExploration_Modules.D1_B_StatisticalAssessments import Statistical
-from D1_DataExploration_Modules.D1_C_MissingDataEvaluations import MissingData
+from D1_DataExploration_Modules.D1_D_GraphsVisualizations import Graph
 
 # Modify this from True/False to show full dataset.describe() in console
 pandas.set_option('display.expand_frame_repr', True)
@@ -68,7 +68,6 @@ statistic_dataset = Statistical.get_statistical_dataset()
 
 # Part C Start
 
-missing_dataset = MissingData.check_missing_data()
 
 # Part C End
 
@@ -80,12 +79,7 @@ missing_dataset = MissingData.check_missing_data()
 
 # Part D Start
 
+FirstGraph = Graph(dataset, "X", "Y")
 
 # Part D End
-
-
-
-
-
-
 
