@@ -30,6 +30,7 @@ from pathlib import Path
 # Local Imports
 from D1_DataExploration_Modules.D1_A_LoadDescribeData import BikeData
 from D1_DataExploration_Modules.D1_B_StatisticalAssessments import Statistical
+from D1_DataExploration_Modules.D1_D_GraphsVisualizations import Graph
 
 # Modify this from True/False to show full dataset.describe() in console
 pandas.set_option('display.expand_frame_repr', True)
@@ -78,6 +79,7 @@ statistic_dataset = Statistical.get_statistical_dataset()
 
 # Part D Start
 
+FirstGraph = Graph(dataset, "X", "Y")
 
 # Part D End
 
