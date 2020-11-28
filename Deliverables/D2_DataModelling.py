@@ -20,6 +20,20 @@ COMP309 Bike Theft Analysis
 
 """
 
+# External Imports
+import os, pandas
+
+# Local Imports
+from D1_DataExploration_Modules.D1_BikeData import BikeData
+
+
+""" ==========================================================================
+    INITIALIZING BikeData CLASS
+==========================================================================="""
+
+BikeData = BikeData()
+
+
 """===========================================================================
     PART A) Data transformations – includes handling missing data, 
             categorical data management, data normalization and 
@@ -28,7 +42,7 @@ COMP309 Bike Theft Analysis
 
 # Part A Start
 
-
+trimmed_ds = BikeData.get_trimmed_dataset()
 
 # Part A End
 

@@ -2,10 +2,10 @@
 """
 COMP309 Bike Theft Analysis
 301 063 251 : Arthur Batista
-### ### ### : Full Name
-### ### ### : Full Name
-### ### ### : Full Name
 300 549 638 : Matthew Naruse
+301 041 132 : Trent B Minia
+300 982 276 : Simon Ducuara
+### ### ### : Full Name
 
 1) Data exploration: a complete review and analysis of the dataset including:
     a) Load and describe data elements (columns), provide descriptions 
@@ -28,12 +28,16 @@ import os, pandas
 from pathlib import Path
 
 # Local Imports
-from D1_DataExploration_Modules.D1_A_LoadDescribeData import BikeData
-from D1_DataExploration_Modules.D1_B_StatisticalAssessments import Statistical
-from D1_DataExploration_Modules.D1_D_GraphsVisualizations import Graph
+from D1_DataExploration_Modules.D1_BikeData import BikeData
 
 # Modify this from True/False to show full dataset.describe() in console
 pandas.set_option('display.expand_frame_repr', True)
+
+""" ==========================================================================
+    INITIALIZING BikeData CLASS
+==========================================================================="""
+
+BikeData = BikeData()
 
 """===========================================================================
     PART A) Load and describe data elements (columns), provide descriptions 
@@ -43,8 +47,8 @@ pandas.set_option('display.expand_frame_repr', True)
 
 # Part A Start
 
-dataset = BikeData.get_dataset()
-dataset_meta = BikeData.get_metadataset()
+dataset = BikeData.get_raw_dataset()
+metadataset = BikeData.get_raw_metadataset()
 
 # Part A End
 
@@ -54,10 +58,7 @@ dataset_meta = BikeData.get_metadataset()
 
 # Part B Start
 
-statistic_dataset = Statistical.get_statistical_dataset()
-
-#Found out it is not necessary display statistical assessments for metadataset
-#statistic_metadataset = Statistical.get_statistical_metadataset()
+desc_ds = BikeData.get_statistical_dataset()
 
 # Part B End
 
@@ -68,6 +69,7 @@ statistic_dataset = Statistical.get_statistical_dataset()
 
 # Part C Start
 
+miss_ds = BikeData.check_missing_data()
 
 # Part C End
 
@@ -79,7 +81,7 @@ statistic_dataset = Statistical.get_statistical_dataset()
 
 # Part D Start
 
-FirstGraph = Graph(dataset, "X", "Y")
+BikeData.get_graph_raw("X", "Y")
 
 # Part D End
 
