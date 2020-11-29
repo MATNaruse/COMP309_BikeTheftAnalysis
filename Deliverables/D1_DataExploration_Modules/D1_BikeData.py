@@ -11,7 +11,7 @@ class BikeData:
     """
     
     FeatureColumns: [] = ["Primary_Offence", "Occurance_Time", "Location_Type",
-                          "Bike_Type", "Status", "Neighbourhood"]
+                          "Bike_Type", "Status", "Hood_ID"]
     
     DropColumns: [] = ["X", "Y", "FID", "Occurrence_Date", "City", 
                        "Bike_Speed", "Lat", "Long", "Hood_ID"]
@@ -33,7 +33,7 @@ class BikeData:
 
         """
         if self._dataset is None:
-            print("EMPTY! - FILLING!")
+            print("EMPTY! - FILLING _dataset!")
             path_dataset = os.path.join(Path(__file__).parents[2],
                                         "Dataset\Bicycle_Thefts.csv")
             self._dataset = pd.read_csv(path_dataset)
@@ -52,55 +52,14 @@ class BikeData:
             Created from 'Bicycle_Thefts_Metadata.csv', Unmodified
         """
         if self._metadataset is None:
-            print("EMPTY! - FILLING!")
+            print("EMPTY! - FILLING _metadataset!")
             path_dataset_meta = os.path.join(Path(__file__).parents[2], 
                                              "Dataset\Bicycle_Thefts_Metadata.csv")
             self._metadataset = pd.read_csv(path_dataset_meta)
         
         return self._metadataset
     
-
-    def get_statistical_dataset(self):
-        """
-         Deliverable 1 - B
-        
-
-        Returns
-        -------
-        TYPE
-            DESCRIPTION.
-
-        """
-        return self.get_raw_dataset().describe()
     
-
-    def get_statistical_metadataset(self):
-        """
-         Deliverable 1 - B
-
-        Returns
-        -------
-        TYPE
-            DESCRIPTION.
-
-        """
-        return self.get_raw_metadataset().describe()
-    
-    
-
-    def check_missing_data(self):
-        """
-         Deliverable 1 - C
-
-        Returns
-        -------
-        TYPE
-            DESCRIPTION.
-
-        """
-        return pd.isnull(self.get_raw_dataset())
-    
-
     def get_graph_raw(self,x_axis: str, y_axis :str):
         """
         Deliverable 1 - D

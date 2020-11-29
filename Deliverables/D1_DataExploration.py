@@ -58,7 +58,7 @@ metadataset = BikeData.get_raw_metadataset()
 
 # Part B Start
 
-desc_ds = BikeData.get_statistical_dataset()
+desc_ds = dataset.describe()
 
 # Part B End
 
@@ -69,7 +69,7 @@ desc_ds = BikeData.get_statistical_dataset()
 
 # Part C Start
 
-miss_ds = BikeData.check_missing_data()
+miss_ds = pandas.isnull(dataset)
 
 # Part C End
 
