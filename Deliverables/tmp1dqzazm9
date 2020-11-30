@@ -2,7 +2,7 @@
 # External Imports
 import pandas as pd
 import numpy as np
-import seaborn as sns
+import matplotlib.pyplot as plt
 from sklearn import preprocessing, metrics
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split, KFold, cross_val_score
@@ -50,22 +50,9 @@ Data Modeling
 FeatureSelection = ["Location_Type", "Premise_Type", "Status", "Neighbourhood"]
 FS_bikedata = bikedata[FeatureSelection]
 
-
-
-
 # Graphs =======================================
-# recov_byNeighbourhood = bikedata[['Neighbourhood', 'Status']]
-# recov_byNeighbourhood = recov_byNeighbourhood[recov_byNeighbourhood.iloc[:, 1] == "RECOVERED"]
-# recov_byNeigh_sums = recov_byNeighbourhood['Neighbourhood'].value_counts()
-# uniq_neigh = bikedata['Neighbourhood'].unique()
-
-# fig, ax = plt.subplots(1, 1)
-# ax.hist(recov_byNeighbourhood)
-# ax.set_title("Bike Recoveries by Neighbourhood")
-# ax.set_xlabel("Neighbourhoods")
-# ax.set_ylabel("Number of Recovered Bikes")
-# ax.xaxis.set_ticklabels(uniq_neigh,rotation=90)
-
+recov_byNeighbourhood = bikedata[['Neighbourhood', 'Status']]
+recov_byNeighbourhood = recov_byNeighbourhood[recov_byNeighbourhood.iloc[:, 1] == "RECOVERED"]
 
 # Getting Categorical Columns for Dummy Generation
 FS_bikedata_cat_col = SF.get_cat_col(FS_bikedata, "FS_bikedata")

@@ -35,8 +35,11 @@ def disp_col_w_missing(df: pd.DataFrame, df_label:str = None, colList:[] = None,
     print(col_w_missing[col_w_missing.iloc[:,0] > 0])
     
     
-def gen_json_testset(df: pd.DataFrame, rando_num:int = 0):
+def gen_json_testset(df: pd.DataFrame, rando_num:int = 0, no_status:bool = False):
+    local_df = df
+    if no_status:
+        local_df = df.drop("Status", axis=1)
     if rando_num:
-        rando_df = df.sample(n=rando_num)
+        rando_df = local_df.sample(n=rando_num)
         return rando_df.to_json(orient="records")
-    return df.to_json(orient="records")
+    return local_df.to_json(orient="records")

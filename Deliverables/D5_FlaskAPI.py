@@ -43,7 +43,7 @@ def predict():
             scaled_df = scaler.fit_transform(query)
             # return to data frame
             query = pd.DataFrame(scaled_df, columns=model_columns)
-            # print(query)
+            print(query)
             prediction = list(lr.predict(query))
             count_0 = prediction.count(0)
             count_9 = prediction.count(9)
