@@ -6,5 +6,5 @@ save_non_project_files = False
 
 [main]
 version = 0.2.0
-recent_files = ['Deliverables\\D1_DataExploration.py', 'Deliverables\\D1_DataExploration_Modules\\D1_A_LoadDescribeData.py', 'Deliverables\\D1_DataExploration_Modules\\D1_B_StatisticalAssessments.py', 'Deliverables\\D1_DataExploration_Modules\\D1_C_MissingDataEvaluations.py', 'Deliverables\\D1_DataExploration_Modules\\D1_D_GraphsVisualizations.py', 'Deliverables\\D2_DataModelling.py']
+recent_files = ['Deliverables\\D1_DataExploration.py', 'Deliverables\\D2_DataModelling.py', 'Deliverables\\D1_DataExploration_Modules\\D1_BikeData.py', 'Deliverables\\D3_Model_Build.py', 'Deliverables\\D4_Model_Eval.py', 'Deliverables\\D5_FlaskAPI.py']
 

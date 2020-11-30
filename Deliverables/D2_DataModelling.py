@@ -20,6 +20,25 @@ COMP309 Bike Theft Analysis
 
 """
 
+# External Imports
+import os, pandas
+import numpy as np
+
+from sklearn.feature_selection import RFE
+from sklearn.svm import SVR
+import matplotlib.pyplot as plt
+
+# Local Imports
+from D1_DataExploration_Modules.D1_BikeData import BikeData
+
+
+""" ==========================================================================
+    INITIALIZING BikeData CLASS
+==========================================================================="""
+
+BikeData = BikeData()
+raw_dataset = BikeData.get_raw_dataset()
+
 """===========================================================================
     PART A) Data transformations – includes handling missing data, 
             categorical data management, data normalization and 
@@ -28,7 +47,7 @@ COMP309 Bike Theft Analysis
 
 # Part A Start
 
-
+trimmed_ds = BikeData.get_trimmed_dataset()
 
 # Part A End
 
@@ -38,8 +57,30 @@ COMP309 Bike Theft Analysis
 
 # Part B Start
 
+FeatureSelection = ["Location_Type", "Status", "Hood_ID"]
+
+def val_to_num(lValues:[], reverse:bool = False) -> {}:
+    out_dict = {}
+    for value in list(lValues):
+        if(reverse):
+            out_dict[value] = list(lValues).index(value)
+        else:
+            out_dict[list(lValues).index(value)] = value
+    return out_dict
 
 
+test = val_to_num(FeatureSelection)
+nbhd_toNumbers = val_to_num(trimmed_ds['Neighbourhood'].unique())
+locType_toNum = val_to_num(raw_dataset['Location_Type'].unique(), True)
+status_toNum = val_to_num(raw_dataset['Status'].unique(), True)
+d = pandas.DataFrame(
+    {'Column_Name':trimmed_ds.columns.values, 
+     'NuMbErS': np.random.randn(len(trimmed_ds.columns.values))})
+
+featSelc_dataset = raw_dataset[FeatureSelection]
+
+featSelc_dataset['Status'].replace(status_toNum, inplace=True)
+featSelc_dataset['Location_Type'].replace(locType_toNum, inplace=True)
 # Part B End
 
 """===========================================================================
