@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 # External Imports
+import os
+from pathlib import Path
 import pandas as pd
 import numpy as np
 import seaborn as sns
@@ -17,7 +19,8 @@ Data Exploration
 """
 
 # Loading Data
-bikedata = pd.read_csv('D:/School/Fall2020/COMP309_BikeTheftAnalysis/Dataset/Bicycle_Thefts.csv')
+bikedata = pd.read_csv(os.path.join(Path(__file__).parents[1],
+                                        "Dataset\Bicycle_Thefts.csv"))
 # Quick View of Data
 print(bikedata.columns.values)
 print(bikedata.info())
@@ -38,11 +41,6 @@ SF.disp_col_w_missing(bikedata, "bikedata", categorical_columns)
 # As we are CURRENTLY not focusing on Bike_Model and Bike_Colour, don't need
 #   to worry about them for now (?)
 
-# Graphs =======================================
-
-
-
-
 """
 Data Modeling
 """
@@ -50,28 +48,16 @@ Data Modeling
 FeatureSelection = ["Location_Type", "Premise_Type", "Status", "Neighbourhood"]
 FS_bikedata = bikedata[FeatureSelection]
 
-
-
-
-# Graphs =======================================
-# recov_byNeighbourhood = bikedata[['Neighbourhood', 'Status']]
-# recov_byNeighbourhood = recov_byNeighbourhood[recov_byNeighbourhood.iloc[:, 1] == "RECOVERED"]
-# recov_byNeigh_sums = recov_byNeighbourhood['Neighbourhood'].value_counts()
-# uniq_neigh = bikedata['Neighbourhood'].unique()
-
-# fig, ax = plt.subplots(1, 1)
-# ax.hist(recov_byNeighbourhood)
-# ax.set_title("Bike Recoveries by Neighbourhood")
-# ax.set_xlabel("Neighbourhoods")
-# ax.set_ylabel("Number of Recovered Bikes")
-# ax.xaxis.set_ticklabels(uniq_neigh,rotation=90)
-
+# # Prepping 'Occurrence_Time'
+# occTime_parsed = SF.parse_time(FS_bikedata['Occurrence_Time'])
+# FS_bikedata['Occurrence_Time'] = occTime_parsed
 
 # Getting Categorical Columns for Dummy Generation
 FS_bikedata_cat_col = SF.get_cat_col(FS_bikedata, "FS_bikedata")
 FS_bikedata_dumm = pd.get_dummies(FS_bikedata, columns=FS_bikedata_cat_col, dummy_na=False)
 print("\nConfirming Missing Data(?):\n===========================")
 print(len(FS_bikedata_dumm) - FS_bikedata_dumm.count())
+
 
 # Creating Scalar Object
 scaler = preprocessing.StandardScaler()

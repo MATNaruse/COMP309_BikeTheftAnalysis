@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
+import datetime
 
 def get_cat_col(df: pd.DataFrame, df_label:str = None, fillna:bool = False) -> []:
     categorical_columns = []
@@ -43,3 +44,22 @@ def gen_json_testset(df: pd.DataFrame, rando_num:int = 0, no_status:bool = False
         rando_df = local_df.sample(n=rando_num)
         return rando_df.to_json(orient="records")
     return local_df.to_json(orient="records")
+
+def parse_time(timeList: []) -> []:
+    # For parsing 'Occurrence_Time' into calc. minutes
+    out_list: [] = []
+    dt_delta = datetime.datetime(1900,1, 1)
+    for time in timeList:
+        temp_time_hold = datetime.datetime.strptime(time, '%H:%M')
+        out_list.append((temp_time_hold - dt_delta).total_seconds()/60)
+    return out_list
+    
+def gen_json_dummy(df: pd.DataFrame, pinColValue: [], size:int):
+    # Either single tuple of fixed values, or list of tuples.
+    # -> Treat as dict -> "if colname = "colname", put val.
+    local_df = None
+    
+
+    
+    
+    
