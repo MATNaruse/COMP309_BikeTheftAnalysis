@@ -19,3 +19,50 @@ COMP309 Bike Theft Analysis
         simple Jinja HTML templates with or without Java script, REACT 
         or any other technology but at minimum use POSTMAN Client API.
 """
+from flask import Flask, request, jsonify
+import traceback
+import pandas as pd
+import numpy
+import joblib
+import sys
+# Your API definition
+app = Flask(__name__)
+@app.route("/predict", methods=['GET','POST']) #use decorator pattern for the route
+def predict():
+    print("PREDICTING")
+    if lr:
+        try:
+            json_ = request.json
+            # print(json_)
+            query = pd.get_dummies(pd.DataFrame(json_))
+            query = query.reindex(columns=model_columns, fill_value=0)
+            # print(query)
+            from sklearn import preprocessing
+            scaler = preprocessing.StandardScaler()
+            # Fit your data on the scaler object
+            scaled_df = scaler.fit_transform(query)
+            # return to data frame
+            query = pd.DataFrame(scaled_df, columns=model_columns)
+            # print(query)
+            prediction = list(lr.predict(query))
+            print({'predictions': str(prediction)})
+            return jsonify({'predictions': str(prediction)})
+
+        except:
+
+            return jsonify({'trace': traceback.format_exc()})
+    else:
+        print ('Train the model first')
+        return ('No model here to use')
+
+if __name__ == '__main__':
+    try:
+        port = int(sys.argv[1]) # This is for a command-line input
+    except:
+        port = 12345 # If you don't provide any port the port will be set to 12345
+
+    lr = joblib.load('D:\School\Fall2020\COMP309_BikeTheftAnalysis\Deliverables\model_lr2.pkl') # Load "model.pkl"
+    print ('Model loaded')
+    model_columns = joblib.load('D:\School\Fall2020\COMP309_BikeTheftAnalysis\Deliverables\model_columns.pkl') # Load "model_columns.pkl"
+    print ('Model columns loaded')
+    app.run(port=port, debug=True)

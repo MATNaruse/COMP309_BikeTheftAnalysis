@@ -26,18 +26,22 @@ import numpy as np
 
 from sklearn.feature_selection import RFE
 from sklearn.svm import SVR
+from sklearn import preprocessing
+from sklearn.linear_model import LogisticRegression
 import matplotlib.pyplot as plt
 
 # Local Imports
-from D1_DataExploration_Modules.D1_BikeData import BikeData
+from D1_BikeData import BikeData
 
 
 """ ==========================================================================
-    INITIALIZING BikeData CLASS
+    PREPARING DATA
 ==========================================================================="""
 
 BikeData = BikeData()
+
 raw_dataset = BikeData.get_raw_dataset()
+cleaned_ds = BikeData.get_clean_dataset()
 
 """===========================================================================
     PART A) Data transformations – includes handling missing data, 
@@ -57,10 +61,34 @@ trimmed_ds = BikeData.get_trimmed_dataset()
 
 # Part B Start
 
-FeatureSelection = ["Location_Type", "Status", "Hood_ID"]
-
 def val_to_num(lValues:[], reverse:bool = False) -> {}:
+    """
+    Generate a dict from List
+    
+    Parameters:
+    -----------
+    lValues:
+        List of Values
+    
+    reverse:
+        Use Values as Keys instead of Index
+
+    Returns:
+    --------
+    out_dict:
+        A Dictionary of input values
+    """
     out_dict = {}
+    # indexes = []
+    # for i in range(0, len(lValues)):
+    #     indexes.append(np.random.seed(1))
+
+    # for new_idx, value in zip(indexes, list(lValues)):
+    #     if(reverse):
+    #         out_dict[value] = new_idx
+    #     else:
+    #         out_dict[new_idx] = value
+        
     for value in list(lValues):
         if(reverse):
             out_dict[value] = list(lValues).index(value)
@@ -69,18 +97,75 @@ def val_to_num(lValues:[], reverse:bool = False) -> {}:
     return out_dict
 
 
-test = val_to_num(FeatureSelection)
-nbhd_toNumbers = val_to_num(trimmed_ds['Neighbourhood'].unique())
-locType_toNum = val_to_num(raw_dataset['Location_Type'].unique(), True)
-status_toNum = val_to_num(raw_dataset['Status'].unique(), True)
-d = pandas.DataFrame(
-    {'Column_Name':trimmed_ds.columns.values, 
-     'NuMbErS': np.random.randn(len(trimmed_ds.columns.values))})
+# Stating which columns we're considering Features
+FeatureSelection = ["Location_Type", "Occurrence_Time", "Hood_ID", "Status"]
 
-featSelc_dataset = raw_dataset[FeatureSelection]
+# Creating Value to Number references for Categorical Values
+loctypeToNum = val_to_num(cleaned_ds['Location_Type'].unique(), True)
+statusToNum = val_to_num(cleaned_ds['Status'].unique(), True)
+timeToNum = val_to_num(cleaned_ds['Occurrence_Time'].unique(), True)
+# Creating a new DataFrame based on the Feature Selection
+featSelc_dataset = cleaned_ds[FeatureSelection]
+featSele_dataset_Cat = cleaned_ds[FeatureSelection]
 
-featSelc_dataset['Status'].replace(status_toNum, inplace=True)
-featSelc_dataset['Location_Type'].replace(locType_toNum, inplace=True)
+
+# Replacing the Categorical Values with Numbers
+featSelc_dataset['Status'].replace(statusToNum, inplace=True)
+featSelc_dataset['Location_Type'].replace(loctypeToNum, inplace=True)
+featSelc_dataset['Occurrence_Time'].replace(timeToNum, inplace=True)
+scaler = preprocessing.StandardScaler()
+
+scaled_df = scaler.fit_transform(featSelc_dataset)
+scaled_df = pandas.DataFrame(scaled_df, columns = featSelc_dataset.columns)
+print(scaled_df['Location_Type'].describe())
+print(scaled_df['Occurrence_Time'].describe())
+print(scaled_df['Status'].describe())
+print(scaled_df['Hood_ID'].describe())
+print(scaled_df.dtypes)
+
+
+dependant_variable = 'Status'
+x = scaled_df[scaled_df.columns.difference([dependant_variable])]
+y = scaled_df[dependant_variable]
+
+y=y.astype(int)
+
+from sklearn.model_selection import train_test_split
+trainX, testX, trainY, testY = train_test_split(x,y, test_size = 0.2)
+
+lr = LogisticRegression(solver='lbfgs')
+lr.fit(x,y)
+
+from sklearn.model_selection import KFold
+crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
+from sklearn.model_selection import cross_val_score
+score = np.mean(cross_val_score(lr, trainX, trainY, scoring='accuracy', cv=crossvalidation, n_jobs=1))
+print('The score of the 10 fold run is: ', score)
+
+testY_predict = lr.predict(testX)
+testY_predict.dtype
+print(f"The 'Odds' \n{testY_predict.sum()}" )
+
+from sklearn import metrics
+labels = y.unique()
+print(labels)
+print("Accuracy:", metrics.accuracy_score(testY, testY_predict))
+from sklearn.metrics import confusion_matrix
+print("Confusion matrix \n", confusion_matrix(testY, testY_predict, labels))
+
+
+# Step 14
+import joblib 
+joblib.dump(lr, 'model_lr2.pkl')
+print("Model dumped!")
+
+
+# Step 15
+model_columns = list(x.columns)
+print(model_columns)
+joblib.dump(model_columns, 'model_columns.pkl')
+print("Models columns dumped!")
+
 # Part B End
 
 """===========================================================================

@@ -28,7 +28,7 @@ import os, pandas
 from pathlib import Path
 
 # Local Imports
-from D1_DataExploration_Modules.D1_BikeData import BikeData
+from D1_BikeData import BikeData
 
 # Modify this from True/False to show full dataset.describe() in console
 pandas.set_option('display.expand_frame_repr', True)
@@ -69,7 +69,36 @@ desc_ds = dataset.describe()
 
 # Part C Start
 
-miss_ds = pandas.isnull(dataset)
+miss_ds = pandas.isnull(dataset).sum()
+
+# X                      0
+# Y                      0
+# FID                    0
+# Index_                 0
+# event_unique_id        0
+# Primary_Offence        0
+# Occurrence_Date        0
+# Occurrence_Year        0
+# Occurrence_Month       0
+# Occurrence_Day         0
+# Occurrence_Time        0
+# Division               0
+# City                   0
+# Location_Type          0
+# Premise_Type           0
+# Bike_Make              0
+# Bike_Model          8141
+# Bike_Type              0
+# Bike_Speed             0
+# Bike_Colour         1729
+# Cost_of_Bike        1536
+# Status                 0
+# Hood_ID                0
+# Neighbourhood          0
+# Lat                    0
+# Long                   0
+
+# Only need to clean ["Bike_Model", "Bike_Colour", "Cost_of_Bike"]
 
 # Part C End
 
@@ -81,7 +110,7 @@ miss_ds = pandas.isnull(dataset)
 
 # Part D Start
 
-BikeData.get_graph_raw("Neighbourhood", "Status")
+# BikeData.get_graph_raw("Neighbourhood", "Status")
 
 # Part D End
 
