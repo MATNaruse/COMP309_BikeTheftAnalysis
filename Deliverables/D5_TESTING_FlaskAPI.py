@@ -27,7 +27,7 @@ print(df.head())
 df.describe()
 df.info()
 #check for null values
-print(len(df) - df.count())  #Cabin , boat, home.dest have so many missing values
+print(len(df) - df.count())
 
 # Step 7
 include = ["Location_Type", "Premise_Type","Hood_ID", "Status"]
@@ -92,6 +92,10 @@ y = y.astype(int)
 # Split the data into train test
 from sklearn.model_selection import train_test_split
 trainX,testX,trainY,testY = train_test_split(x,y, test_size = 0.2)
+trainX.shape
+testX.shape
+trainY.shape
+testY.shape
 #build the model
 lr = LogisticRegression(solver='lbfgs')
 lr.fit(x, y)
@@ -106,8 +110,7 @@ print ('The score of the 10 fold run is: ',score)
 # Step 13
 testY_predict = lr.predict(testX)
 testY_predict.dtype
-# print("PREDICTIONS:")
-# testY_predict = np.where(testY_predict==9, 1, testY_predict)
+
 #Import scikit-learn metrics module for accuracy calculation
 from sklearn import metrics 
 labels = y.unique()

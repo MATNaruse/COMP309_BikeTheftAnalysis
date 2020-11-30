@@ -45,8 +45,14 @@ def predict():
             query = pd.DataFrame(scaled_df, columns=model_columns)
             # print(query)
             prediction = list(lr.predict(query))
-            print({'predictions': str(prediction)})
-            return jsonify({'predictions': str(prediction)})
+            count_0 = prediction.count(0)
+            count_9 = prediction.count(9)
+            
+            out_json = {'predictions': str(prediction), 
+                            'count_0': count_0, 
+                            'count_9': count_9}
+            print(out_json)
+            return jsonify(out_json)
 
         except:
 
@@ -61,7 +67,7 @@ if __name__ == '__main__':
     except:
         port = 12345 # If you don't provide any port the port will be set to 12345
 
-    lr = joblib.load('D:\School\Fall2020\COMP309_BikeTheftAnalysis\Deliverables\model_lr2.pkl') # Load "model.pkl"
+    lr = joblib.load('D:\School\Fall2020\COMP309_BikeTheftAnalysis\Deliverables\model_lr.pkl') # Load "model.pkl"
     print ('Model loaded')
     model_columns = joblib.load('D:\School\Fall2020\COMP309_BikeTheftAnalysis\Deliverables\model_columns.pkl') # Load "model_columns.pkl"
     print ('Model columns loaded')

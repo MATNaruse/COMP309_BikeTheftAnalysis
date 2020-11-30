@@ -6,5 +6,5 @@ save_non_project_files = False
 
 [main]
 version = 0.2.0
-recent_files = ['Deliverables\\D2_DataModelling.py', 'ToRemove\\D2_DataModelling_Modules\\D2_A_DataTransforms.py', 'Deliverables\\D1_DataExploration.py', 'Deliverables\\D5_FlaskAPI.py', '..\\COMP309\\CourseMaterials\\Week11\\Lab\\api_lr_matthew.py', '..\\COMP309\\CourseMaterials\\Week11\\Lab\\model_matthew_csv.py', 'Deliverables\\D5_TESTING_FlaskAPI.py']
+recent_files = ['Deliverables\\D5_FlaskAPI.py', 'Deliverables\\D5_TESTING_FlaskAPI.py', '..\\COMP309\\CourseMaterials\\Week11\\Lab\\api_lr_matthew.py', '..\\COMP309\\CourseMaterials\\Week11\\Lab\\model_matthew_csv.py', 'ToRemove\\D1_DataExploration_Modules\\D1_B_StatisticalAssessments.py', 'ToRemove\\D1_DataExploration_Modules\\D1_C_MissingDataEvaluations.py', 'ToRemove\\D1_DataExploration_Modules\\D1_D_GraphsVisualizations.py', 'ToRemove\\D1_DataExploration_Modules\\D1_A_LoadDescribeData.py', 'Deliverables\\D1_DataExploration.py']
 
