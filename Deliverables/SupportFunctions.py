@@ -54,10 +54,24 @@ def parse_time(timeList: []) -> []:
         out_list.append((temp_time_hold - dt_delta).total_seconds()/60)
     return out_list
     
-def gen_json_dummy(df: pd.DataFrame, pinColValue: [], size:int):
+def gen_json_dummy(df: pd.DataFrame, pinColValue: [], size:int, toJson:bool = False):
     # Either single tuple of fixed values, or list of tuples.
     # -> Treat as dict -> "if colname = "colname", put val.
-    local_df = None
+    local_df = df.sample(size)
+    colValDict: {} = {}
+    for tup in pinColValue:
+        colValDict[tup[0]] = tup[1]
+    
+    for key, val in colValDict.items():
+        print(f"{key} | {val}")
+        local_df[key].replace(regex="^.*$", value=val, inplace=True)
+    
+    if toJson:
+        local_df = local_df.drop('Status', axis=1)
+        return local_df.to_json(orient="records")
+    return local_df
+
+        
     
 
     
