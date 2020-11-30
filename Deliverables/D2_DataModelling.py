@@ -59,9 +59,7 @@ trimmed_ds = BikeData.get_trimmed_dataset()
 
 FeatureSelection = ["Location_Type", "Status", "Hood_ID"]
 
-# ds_norm = (trimmed_ds["Neighbourhood"] - trimmed_ds["Neighbourhood"].min()) / (trimmed_ds["Neighbourhood"].max() - trimmed_ds["Neighbourhood"].min())
-
-def values_to_numbers(lValues:[], reverse:bool = False) -> {}:
+def val_to_num(lValues:[], reverse:bool = False) -> {}:
     out_dict = {}
     for value in list(lValues):
         if(reverse):
@@ -71,10 +69,10 @@ def values_to_numbers(lValues:[], reverse:bool = False) -> {}:
     return out_dict
 
 
-test = values_to_numbers(FeatureSelection)
-nbhd_toNumbers = values_to_numbers(trimmed_ds['Neighbourhood'].unique())
-locType_toNum = values_to_numbers(raw_dataset['Location_Type'].unique(), True)
-status_toNum = values_to_numbers(raw_dataset['Status'].unique(), True)
+test = val_to_num(FeatureSelection)
+nbhd_toNumbers = val_to_num(trimmed_ds['Neighbourhood'].unique())
+locType_toNum = val_to_num(raw_dataset['Location_Type'].unique(), True)
+status_toNum = val_to_num(raw_dataset['Status'].unique(), True)
 d = pandas.DataFrame(
     {'Column_Name':trimmed_ds.columns.values, 
      'NuMbErS': np.random.randn(len(trimmed_ds.columns.values))})

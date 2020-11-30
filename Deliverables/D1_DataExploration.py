@@ -81,7 +81,7 @@ miss_ds = pandas.isnull(dataset)
 
 # Part D Start
 
-BikeData.get_graph_raw("X", "Y")
+BikeData.get_graph_raw("Neighbourhood", "Status")
 
 # Part D End
 
