@@ -19,56 +19,50 @@ COMP309 Bike Theft Analysis
         simple Jinja HTML templates with or without Java script, REACT 
         or any other technology but at minimum use POSTMAN Client API.
 """
-from flask import Flask, request, jsonify
-import traceback
+
+import traceback, joblib, os
 import pandas as pd
-import numpy
-import joblib
-import sys
-# Your API definition
+from pathlib import Path
+from flask import Flask, request, jsonify
+
+
 app = Flask(__name__)
-@app.route("/predict", methods=['GET','POST']) #use decorator pattern for the route
+
+@app.route("/predict", methods=['POST'])
 def predict():
-    print("PREDICTING")
     if dTree:
         try:
             json_ = request.json
-            # print(json_)
+
             query = pd.get_dummies(pd.DataFrame(json_))
             query = query.reindex(columns=model_columns, fill_value=0)
-            # print(query)
-            # from sklearn import preprocessing
-            # scaler = preprocessing.StandardScaler()
-            # Fit your data on the scaler object
-            # scaled_df = scaler.fit_transform(query)
-            # return to data frame
-            # query = pd.DataFrame(scaled_df, columns=model_columns)
             print(query)
+
             prediction = list(dTree.predict(query))
             count_0 = prediction.count(0)
-            count_9 = prediction.count(9)
+            count_1 = prediction.count(1)
             
             out_json = {'predictions': str(prediction), 
                             'count_0': count_0, 
-                            'count_9': count_9}
+                            'count_1': count_1}
             print(out_json)
             return jsonify(out_json)
 
         except:
-
             return jsonify({'trace': traceback.format_exc()})
     else:
         print ('Train the model first')
         return ('No model here to use')
 
 if __name__ == '__main__':
-    try:
-        port = int(sys.argv[1]) # This is for a command-line input
-    except:
-        port = 12345 # If you don't provide any port the port will be set to 12345
-
-    dTree = joblib.load('D:\School\Fall2020\COMP309_BikeTheftAnalysis\Deliverables\model_dTree.pkl') # Load "model.pkl"
-    print ('Model loaded')
-    model_columns = joblib.load('D:\School\Fall2020\COMP309_BikeTheftAnalysis\Deliverables\model_columns.pkl') # Load "model_columns.pkl"
-    print ('Model columns loaded')
-    app.run(port=port, debug=True)
+    
+    print("Loading Model...")
+    dTree = joblib.load(os.path.join(Path(__file__).parents[0],'model_dTree.pkl'))
+    print('...Model loaded!')
+    
+    print("Loading Model Columns...")
+    model_columns = joblib.load(os.path.join(Path(__file__).parents[0],'model_columns.pkl'))
+    print('....Model columns loaded!')
+    
+    
+    app.run(port=12345, debug=True)

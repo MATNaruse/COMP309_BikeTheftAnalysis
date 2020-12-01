@@ -47,18 +47,15 @@ SF.disp_col_w_missing(bikedata, "bikedata", categorical_columns)
 Data Modeling
 """
 # List of Features to focus on
-Predictors = ["Location_Type", "Premise_Type", "Status", "Division"]
+Predictors = ["Location_Type", "Premise_Type","Division", "Hood_ID", "Status"]
 Pred_bikedata = bikedata[Predictors]
 Target = 'Status_RECOVERED'
 
 
-# # Prepping 'Occurrence_Time'
-# occTime_parsed = SF.parse_time(FS_bikedata['Occurrence_Time'])
-# FS_bikedata['Occurrence_Time'] = occTime_parsed
-
 # Getting Categorical Columns for Dummy Generation
 Pred_bikedata_cat_col = SF.get_cat_col(Pred_bikedata, "Pred_bikedata")
 Pred_bikedata_dumm = pd.get_dummies(Pred_bikedata, columns=Pred_bikedata_cat_col, dummy_na=False)
+
 Predictors = Pred_bikedata_dumm.columns.values
 print("\nConfirming Missing Data(?):\n===========================")
 print(len(Pred_bikedata_dumm) - Pred_bikedata_dumm.count())
@@ -77,22 +74,29 @@ print(Pred_bikedata_dumm['Status_RECOVERED'].value_counts())
 # 0    21332 -> STOLEN or UNKNOWN
 # 1      252 -> Actually RECOVERED
 
+# Labeling which rows for Training
 Pred_bikedata_dumm['is_train'] = np.random.uniform(0, 1, len(Pred_bikedata_dumm)) <= .75
 
-train, test = Pred_bikedata_dumm[Pred_bikedata_dumm['is_train']==True], Pred_bikedata_dumm[Pred_bikedata_dumm['is_train']==False]
+# Training Set
+train = Pred_bikedata_dumm[Pred_bikedata_dumm['is_train']==True]
 
-print('Number of observations in the training data:', len(train))
+# Test Set
+test = Pred_bikedata_dumm[Pred_bikedata_dumm['is_train']==False]
 
-print('Number of observations in the test data:',len(test))
+print(f'Train Size:{len(train)}')
+print(f'Test Size:{len(test)}')
 
+
+# Setting up the DecisionTreeClassifier
 dTree = DecisionTreeClassifier(criterion='entropy', min_samples_split=20, random_state=99)
 
+# Fitting Training Data
 dTree.fit(train[Predictors], train[Target])
 
 preds = dTree.predict(test[Predictors])
 
+# Confusion Matrix
 pd.crosstab(test['Status_RECOVERED'], preds, rownames=['Actual'], colnames=['Predictions'])
-
 
 x = Pred_bikedata_dumm[Predictors]
 y = Pred_bikedata_dumm[Target]
@@ -104,6 +108,9 @@ crossvalidation = KFold(n_splits=10, shuffle=True, random_state=1)
 score = np.mean(cross_val_score(dTree, trainX, trainY, scoring='accuracy', cv=crossvalidation, n_jobs=1))
 print(score) 
 
+"""
+Model Scoring & Evaluation
+"""
 
 testY_predict = dTree.predict(testX)
 
@@ -112,28 +119,10 @@ labels = y.unique()
 print("Accuracy:",metrics.accuracy_score(testY, testY_predict))
 print("Confusion matrix \n" , confusion_matrix(testY, testY_predict, labels=labels))
 
-# I have no clue
-# cm = confusion_matrix(testY, testY_predict, labels)
 
-# ax = plt.subplot()
-
-# sns.heatmap(cm, annot=True, ax = ax); #annot=True to annotate cells
-# ax.set_xlabel('Predicted labels');ax.set_ylabel('True labels');
-
-# ax.set_title('Confusion Matrix');
-
-# ax.xaxis.set_ticklabels(['Stolen/Unknown','Recovered']); 
-# ax.yaxis.set_ticklabels(['Stolen/Unknown','Recovered']);
-
-
-# """
-# Model Scoring & Evaluation
-# """
-
-
-# """
-# Model Dumping
-# """
+"""
+Model Dumping
+"""
 
 joblib.dump(dTree, "model_dTree.pkl")
 model_columns = list(x.columns)
