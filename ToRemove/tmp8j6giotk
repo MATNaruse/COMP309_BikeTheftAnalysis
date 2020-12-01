@@ -5,7 +5,7 @@ COMP309 Bike Theft Analysis
 300 549 638 : Matthew Naruse
 301 041 132 : Trent B Minia
 300 982 276 : Simon Ducuara
-300 944 562 : Zeedan Ahmed
+300 944 562 : zeedan Ahmed
 
 5)	Deploying the model
     a)	Using flask framework arrange to turn your selected machine-learning 
