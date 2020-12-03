@@ -45,7 +45,7 @@ SF.disp_col_w_missing(bikedata, "bikedata", categorical_columns)
 Data Modeling
 """
 # List of Features to focus on
-FeatureSelection = ["Location_Type", "Premise_Type", "Status", "Division"]
+FeatureSelection = ["Location_Type", "Premise_Type", "Status", "Neighbourhood"]
 FS_bikedata = bikedata[FeatureSelection]
 
 # # Prepping 'Occurrence_Time'
