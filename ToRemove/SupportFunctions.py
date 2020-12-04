@@ -13,21 +13,21 @@ import datetime
 
 def get_cat_col(df: pd.DataFrame, df_label:str = None, fillna:bool = False) -> []:
     """
-    
+    Returns list of columns that contain Categorical Values
 
     Parameters
     ----------
     df : pd.DataFrame
-        DESCRIPTION.
+        Dataframe to check
     df_label : str, optional
-        DESCRIPTION. The default is None.
+        Label for console output. The default is None.
     fillna : bool, optional
-        DESCRIPTION. The default is False.
+        Boolean to fill numerical values while iterating. The default is False.
 
     Returns
     -------
     []
-        DESCRIPTION.
+        List of column names that contain Categorical Values.
 
     """
     categorical_columns = []
@@ -50,18 +50,18 @@ def get_cat_col(df: pd.DataFrame, df_label:str = None, fillna:bool = False) -> [
 
 def disp_col_w_missing(df: pd.DataFrame, df_label:str = None, colList:[] = None, threshold:int = 0):
     """
-    
+    Displays all columns with missing values
 
     Parameters
     ----------
     df : pd.DataFrame
-        DESCRIPTION.
+        Dataframe to check
     df_label : str, optional
-        DESCRIPTION. The default is None.
+        Label for console output. The default is None.
     colList : [], optional
-        DESCRIPTION. The default is None.
+        List of specific column names to check. The default is None.
     threshold : int, optional
-        DESCRIPTION. The default is 0.
+        Maximum number of missing values to ignore. The default is 0.
 
     Returns
     -------
@@ -83,47 +83,24 @@ def disp_col_w_missing(df: pd.DataFrame, df_label:str = None, colList:[] = None,
     print(col_w_missing[col_w_missing.iloc[:,0] > 0])
     
 
-def parse_time(timeList: []) -> []:
-    """
-    
-
-    Parameters
-    ----------
-    timeList : []
-        DESCRIPTION.
-
-    Returns
-    -------
-    []
-        DESCRIPTION.
-
-    """
-    # For parsing 'Occurrence_Time' into calc. minutes
-    out_list: [] = []
-    dt_delta = datetime.datetime(1900,1, 1)
-    for time in timeList:
-        temp_time_hold = datetime.datetime.strptime(time, '%H:%M')
-        out_list.append((temp_time_hold - dt_delta).total_seconds()/60)
-    return out_list
-    
 
 def gen_json_testset(df: pd.DataFrame, rando_num:int = 0, no_status:bool = False) -> str:
     """
-    
+    Generate a json string of existing data for Postman
 
     Parameters
     ----------
     df : pd.DataFrame
-        DESCRIPTION.
+        DataFrame that contains data to test from.
     rando_num : int, optional
-        DESCRIPTION. The default is 0.
+        Number of Random Rows to pull. The default is 0, which will use entire DataFrame.
     no_status : bool, optional
-        DESCRIPTION. The default is False.
+        Boolean whether to include the 'Status' column. The default is False.
 
     Returns
     -------
     str
-        DESCRIPTION.
+        Json-formatted string to paste into Postman.
 
     """
     local_df = df
@@ -135,25 +112,22 @@ def gen_json_testset(df: pd.DataFrame, rando_num:int = 0, no_status:bool = False
     return local_df.to_json(orient="records")
 
 
-def gen_json_dummy(df: pd.DataFrame, pinColValue: [], size:int, toJson:bool = False) -> any:
+def gen_json_dummy(df: pd.DataFrame, pinColValue: [], size:int) -> str:
     """
-    
-
+    Generate a json string with specific column values for Postman
     Parameters
     ----------
     df : pd.DataFrame
-        DESCRIPTION.
+        DataFrame that contains data to test from.
     pinColValue : []
-        DESCRIPTION.
+        List of (ColumnName, ColumnValue) tuples 
     size : int
-        DESCRIPTION.
-    toJson : bool, optional
-        DESCRIPTION. The default is False.
+        Number of Samples to return
 
     Returns
     -------
-    any
-        DESCRIPTION.
+    str
+        Json-formatted string to paste into Postman.
 
     """
     local_df = df.sample(size)
@@ -165,10 +139,9 @@ def gen_json_dummy(df: pd.DataFrame, pinColValue: [], size:int, toJson:bool = Fa
         print(f"{key} | {val}")
         local_df[key].replace(regex="^.*$", value=val, inplace=True)
     
-    if toJson:
-        local_df = local_df.drop('Status', axis=1)
-        return local_df.to_json(orient="records")
-    return local_df
+    local_df = local_df.drop('Status', axis=1)
+    return local_df.to_json(orient="records")
+
 
     
     

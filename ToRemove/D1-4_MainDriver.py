@@ -38,11 +38,8 @@ bikedata = bikedata.drop(["X", "Y", "FID", "Index_", "event_unique_id"], axis=1)
 categorical_columns = SF.get_cat_col(bikedata,"bikedata", True)
 
 # Finding out which columns have missing values 
-# *Note: Already 'cleaned' numerical values
+# *Note: Already 'cleaned' numerical values in SF.get_cat_col
 SF.disp_col_w_missing(bikedata, "bikedata", categorical_columns)
-# Expected Columns
-# Bike_Model   8141
-# Bike_Colour  1729
 
 # As we are CURRENTLY not focusing on Bike_Model and Bike_Colour, don't need
 #   to worry about them for now (?)
@@ -74,17 +71,6 @@ bd_major_downsampled= resample(bd_major, replace=False, n_samples=len(bd_minor),
 bd_downsampled = pd.concat([bd_major_downsampled, bd_minor])
 
 print(bd_downsampled.Status.value_counts())
-
-
-# # Creating Scalar Object
-# scaler = preprocessing.StandardScaler()
-# scaled_bikedata = scaler.fit_transform(bd_downsampled)
-# scaled_bikedata = pd.DataFrame(bd_downsampled, columns=FS_bikedata_dumm.columns)
-# scaled_bikedata.describe()
-
-# # Splitting Data for Train/Test
-# y = scaled_bikedata.Status
-# x = scaled_bikedata.drop('Status', axis=1)
 
 
 # Splitting Data for Train/Test
