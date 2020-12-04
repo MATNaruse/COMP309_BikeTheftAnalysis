@@ -41,7 +41,7 @@ def predict():
 
             prediction = list(dTree.predict(query))
             count_0 = prediction.count(0)
-            count_1 = prediction.count(-1)
+            count_1 = prediction.count(1)
             
             out_json = {'predictions': str(prediction), 
                             'count_0': count_0, 

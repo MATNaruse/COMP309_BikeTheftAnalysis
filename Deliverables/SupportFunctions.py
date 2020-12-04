@@ -161,6 +161,14 @@ def gen_json_dummy(df: pd.DataFrame, pinColValue: [], size:int, toJson:bool = Fa
     for tup in pinColValue:
         colValDict[tup[0]] = tup[1]
     
+    for key, val in colValDict.items():
+        print(f"{key} | {val}")
+        local_df[key].replace(regex="^.*$", value=val, inplace=True)
+    
+    if toJson:
+        local_df = local_df.drop('Status', axis=1)
+        return local_df.to_json(orient="records")
+    return local_df
 
     
     

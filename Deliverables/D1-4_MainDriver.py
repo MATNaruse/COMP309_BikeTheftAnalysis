@@ -9,7 +9,7 @@ from sklearn import preprocessing, metrics
 from sklearn.utils import resample
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split, KFold, cross_val_score
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, accuracy_score
 import joblib
 
 # Local Imports
@@ -46,9 +46,11 @@ SF.disp_col_w_missing(bikedata, "bikedata", categorical_columns)
 Data Modeling
 """
 # List of Features to focus on
-FeatureSelection = ["Location_Type", "Premise_Type", "Status", "Neighbourhood"]
+FeatureSelection = ["Location_Type", "Premise_Type", "Division", "Status", "Neighbourhood"]
 FS_bikedata = bikedata[FeatureSelection]
 
+# Transforming 'Status' into binary [Recovered OR Stolen/Unknown]
+FS_bikedata['Status'] = [1 if s=='RECOVERED' else 0 for s in FS_bikedata['Status']]
     
 # Getting Categorical Columns for Dummy Generation
 FS_bikedata_cat_col = SF.get_cat_col(FS_bikedata, "FS_bikedata")
@@ -56,43 +58,44 @@ FS_bikedata_dumm = pd.get_dummies(FS_bikedata, columns=FS_bikedata_cat_col, dumm
 print("\nConfirming Missing Data(?):\n===========================")
 print(len(FS_bikedata_dumm) - FS_bikedata_dumm.count())
 
-# # Creating Scalar Object
-# scaler = preprocessing.StandardScaler()
-# scaled_bikedata = scaler.fit_transform(FS_bikedata_dumm)
-# scaled_bikedata = pd.DataFrame(scaled_bikedata, columns=FS_bikedata_dumm.columns)
-# scaled_bikedata.describe()
-
-scaled_bikedata = FS_bikedata_dumm
-
-# Outcome Column
-dependent_variable = 'Status_RECOVERED'
-
-# Splitting Data for Train/Test
-x = scaled_bikedata[scaled_bikedata.columns.difference([dependent_variable])]
-y = scaled_bikedata[dependent_variable]
-y = y.astype(int)
-
-xTrain, xTest, yTrain, yTest = train_test_split(x, y, test_size=0.3)
 
 # Managing Imbalanced Classes
-# Down-sizing number of STOLEN or UNKNOWN
-bd_majority = FS_bikedata[FS_bikedata.Status!="RECOVERED"]
-bd_minority = FS_bikedata[FS_bikedata.Status=="RECOVERED"]
+bd_major = FS_bikedata_dumm[FS_bikedata_dumm.Status==0]
+bd_minor = FS_bikedata_dumm[FS_bikedata_dumm.Status==1]
 
-bd_majority_downsampled= resample(bd_majority, replace=False, n_samples=len(bd_minority), random_state=123)
+bd_major_downsampled= resample(bd_major, replace=False, n_samples=len(bd_minor), random_state=123)
 
-bd_downsampled = pd.concat([bd_majority_downsampled, bd_minority])
+bd_downsampled = pd.concat([bd_major_downsampled, bd_minor])
 
 print(bd_downsampled.Status.value_counts())
 
+
+# # Creating Scalar Object
+# scaler = preprocessing.StandardScaler()
+# scaled_bikedata = scaler.fit_transform(bd_downsampled)
+# scaled_bikedata = pd.DataFrame(bd_downsampled, columns=FS_bikedata_dumm.columns)
+# scaled_bikedata.describe()
+
+# # Splitting Data for Train/Test
+# y = scaled_bikedata.Status
+# x = scaled_bikedata.drop('Status', axis=1)
+
+# # Outcome Column
+# dependent_variable = 'Status'
+
+# Splitting Data for Train/Test
+y = bd_downsampled.Status
+x = bd_downsampled.drop('Status', axis=1)
+
+xTrain, xTest, yTrain, yTest = train_test_split(x, y, test_size =0.2)
 
 """
 Predictive Model Building
 """
 # DEBUG - Actual Recovery Numbers
-print("\nActual Recovery Numbers")
-print("=======================")
-print(FS_bikedata_dumm['Status_RECOVERED'].value_counts())
+# print("\nActual Recovery Numbers")
+# print("=======================")
+# print(FS_bikedata_dumm['Status'].value_counts())
 # Actual Recovery Numbers
 # =======================
 # 0    21332 -> STOLEN or UNKNOWN
@@ -100,9 +103,12 @@ print(FS_bikedata_dumm['Status_RECOVERED'].value_counts())
 
 
 # Building the Model
-lr = LogisticRegression(solver="lbfgs")
-lr.fit(xTrain,yTrain)
+lr = LogisticRegression(solver="lbfgs", max_iter=10000)
+lr.fit(x,y)
 
+# pls_work_predict = lr.predict(x)
+# print(np.unique(pls_work_predict))
+# print(accuracy_score(y, pls_work_predict))
 
 """
 Model Scoring & Evaluation
