@@ -1,4 +1,13 @@
 # -*- coding: utf-8 -*-
+"""
+COMP309 Bike Theft Analysis
+===========================
+301 063 251 : Arthur Batista
+300 549 638 : Matthew Naruse
+301 041 132 : Trent B Minia
+300 982 276 : Simon Ducuara
+300 944 562 : Zeedan Ahmed
+"""
 # External Imports
 import traceback, joblib, os
 from pathlib import Path
@@ -111,7 +120,7 @@ def gen_json_testset(df: pd.DataFrame, rando_num:int = 0, no_status:bool = False
         return rando_df.to_json(orient="records")
     return local_df.to_json(orient="records")
 
-def gen_json_dummy(df: pd.DataFrame, pinColValue: [], size:int) -> str:
+def gen_json_dummy(df: pd.DataFrame, pinColValue: [], size:int, toDataFrame:bool = False) -> str:
     """
     Generate a json string with specific column values for Postman
     Parameters
@@ -136,9 +145,14 @@ def gen_json_dummy(df: pd.DataFrame, pinColValue: [], size:int) -> str:
     
     for key, val in colValDict.items():
         print(f"{key} | {val}")
-        local_df[key].replace(regex="^.*$", value=val, inplace=True)
+        if isinstance(val, int):
+            local_df[key] = [val if s>0 else val for s in local_df[key]]
+        else:
+            local_df[key].replace(regex="^.*$", value=val, inplace=True)
     
     local_df = local_df.drop('Status', axis=1)
+    if toDataFrame:
+        return local_df
     return local_df.to_json(orient="records")
  
 
@@ -240,7 +254,7 @@ print(confusion_matrix(yTest, yTest_predict, labels=labels))
 Model Dumping
 """
 
-joblib.dump(lr, "model_lr_new.pkl")
+joblib.dump(lr, "model_lr.pkl")
 model_columns = list(x.columns)
 joblib.dump(model_columns, 'model_columns.pkl')
 
