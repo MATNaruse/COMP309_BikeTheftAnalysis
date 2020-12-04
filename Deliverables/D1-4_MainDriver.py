@@ -26,6 +26,11 @@ bikedata = pd.read_csv(os.path.join(Path(__file__).parents[1],
 print(bikedata.columns.values)
 print(bikedata.info())
 
+print("\nActual Recovery Numbers")
+print("=======================")
+print(FS_bikedata_dumm['Status'].value_counts())
+
+
 # Trimming irrelevant columns
 bikedata = bikedata.drop(["X", "Y", "FID", "Index_", "event_unique_id"], axis=1)
 
@@ -55,6 +60,7 @@ FS_bikedata['Status'] = [1 if s=='RECOVERED' else 0 for s in FS_bikedata['Status
 # Getting Categorical Columns for Dummy Generation
 FS_bikedata_cat_col = SF.get_cat_col(FS_bikedata, "FS_bikedata")
 FS_bikedata_dumm = pd.get_dummies(FS_bikedata, columns=FS_bikedata_cat_col, dummy_na=False)
+
 print("\nConfirming Missing Data(?):\n===========================")
 print(len(FS_bikedata_dumm) - FS_bikedata_dumm.count())
 
@@ -80,8 +86,6 @@ print(bd_downsampled.Status.value_counts())
 # y = scaled_bikedata.Status
 # x = scaled_bikedata.drop('Status', axis=1)
 
-# # Outcome Column
-# dependent_variable = 'Status'
 
 # Splitting Data for Train/Test
 y = bd_downsampled.Status
@@ -92,23 +96,11 @@ xTrain, xTest, yTrain, yTest = train_test_split(x, y, test_size =0.2)
 """
 Predictive Model Building
 """
-# DEBUG - Actual Recovery Numbers
-# print("\nActual Recovery Numbers")
-# print("=======================")
-# print(FS_bikedata_dumm['Status'].value_counts())
-# Actual Recovery Numbers
-# =======================
-# 0    21332 -> STOLEN or UNKNOWN
-# 1      252 -> Actually RECOVERED
-
 
 # Building the Model
 lr = LogisticRegression(solver="lbfgs", max_iter=10000)
 lr.fit(x,y)
 
-# pls_work_predict = lr.predict(x)
-# print(np.unique(pls_work_predict))
-# print(accuracy_score(y, pls_work_predict))
 
 """
 Model Scoring & Evaluation
@@ -121,7 +113,7 @@ print(f"\nKFold 10 Score: [{score}]")
 
 # Accuracy
 yTest_predict = lr.predict(xTest)
-print("\nAccuracy:", metrics.accuracy_score(yTest, yTest_predict))
+print("\nAccuracy: %d%%" % ((metrics.accuracy_score(yTest, yTest_predict)) * 100))
 
 # Confusion Matrix
 labels = y.unique() # [0, 9]
@@ -133,13 +125,14 @@ print(confusion_matrix(yTest, yTest_predict, labels=labels))
 """
 Model Dumping
 """
+# TEMP COMMENT OUT TO PREVENT OVERWRITING MODEL
 
-joblib.dump(lr, "model_lr.pkl")
-model_columns = list(x.columns)
-joblib.dump(model_columns, 'model_columns.pkl')
+# joblib.dump(lr, "model_lr_new.pkl")
+# model_columns = list(x.columns)
+# joblib.dump(model_columns, 'model_columns.pkl')
 
-print("Model and Model Columns Dumped!")
+# print("Model and Model Columns Dumped!")
 
-print("\nModel Columns:")
-for col in model_columns:
-    print(f"\t- {col}")
+# print("\nModel Columns:")
+# for col in model_columns:
+#     print(f"\t- {col}")

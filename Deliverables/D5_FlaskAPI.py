@@ -31,7 +31,7 @@ app = Flask(__name__)
 
 @app.route("/predict", methods=['POST'])
 def predict():
-    if dTree:
+    if lr:
         try:
             json_ = request.json
 
@@ -39,7 +39,7 @@ def predict():
             query = query.reindex(columns=model_columns, fill_value=0)
             print(query)
 
-            prediction = list(dTree.predict(query))
+            prediction = list(lr.predict(query))
             count_0 = prediction.count(0)
             count_1 = prediction.count(1)
             
@@ -52,13 +52,13 @@ def predict():
         except:
             return jsonify({'trace': traceback.format_exc()})
     else:
-        print ('Train the model first')
-        return ('No model here to use')
+        print ('Model Required')
+        return ('Model Not Found')
 
 if __name__ == '__main__':
     
     print("Loading Model...")
-    dTree = joblib.load(os.path.join(Path(__file__).parents[0],'model_lr.pkl'))
+    lr = joblib.load(os.path.join(Path(__file__).parents[0],'model_lr.pkl'))
     print('...Model loaded!')
     
     print("Loading Model Columns...")
